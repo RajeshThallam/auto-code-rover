@@ -1,4 +1,4 @@
-from app.model import bedrock, claude, common, gemini, gpt, gptlitellm, groq, ollama
+from app.model import bedrock, claude, common, gemini, gpt, gptlitellm, groq, ollama, vertexai
 
 
 def register_all_models() -> None:
@@ -46,6 +46,15 @@ def register_all_models() -> None:
 
     common.register_model(gemini.GeminiPro())
     common.register_model(gemini.Gemini15Pro())
+    common.register_model(gemini.Gemini15Flash())
+    common.register_model(gemini.Gemini15ProExp())
+    common.register_model(gemini.Gemini15FlashExp())
+
+    common.register_model(vertexai.GeminiPro())
+    common.register_model(vertexai.Gemini15Pro())
+    common.register_model(vertexai.Gemini15Flash())
+    common.register_model(vertexai.Gemini15ProExp())
+    common.register_model(vertexai.Gemini15FlashExp())
 
     # register default model as selected
     common.SELECTED_MODEL = gpt.Gpt35_Turbo0125()

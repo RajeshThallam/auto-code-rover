@@ -119,6 +119,7 @@ Build and start the docker image:
 ```
 docker build -f Dockerfile -t acr .
 docker run -it -e OPENAI_KEY="${OPENAI_KEY:-OPENAI_API_KEY}" -p 3000:3000 -p 5000:5000 acr
+docker run -it -p 3000:3000 -p 5000:5000 --volume ${PWD}/runs:/opt/scratch acr
 ```
 
 Alternatively, you can use `Dockerfile.scratch` which supports arm64 (Apple silicon) and ppc in addition to amd64.
@@ -222,7 +223,7 @@ Then, set up these tasks by running:
 ```
 cd /opt/SWE-bench
 conda activate swe-bench
-python harness/run_setup.py --log_dir logs --testbed testbed --result_dir setup_result --subset_file tasks.txt
+python harness/run_setup.py --log_dir /opt/scratch/logs --testbed /opt/scratch/testbed --result_dir /opt/scratch/setup_result --subset_file tasks.txt
 ```
 
 Once the setup for this task is completed, the following two lines will be printed:
@@ -242,9 +243,53 @@ _If you want to set up multiple tasks together, put their ids in `tasks.txt` and
 Before running the task (`django__django-11133` here), make sure it has been set up as mentioned [above](#set-up-one-or-more-tasks-in-swe-bench).
 
 ```
+# supported models
+gpt-4o-2024-08-06
+gpt-4o-2024-05-13
+gpt-4o-mini-2024-07-18
+gpt-4-turbo-2024-04-09
+gpt-4-0125-preview
+gpt-4-1106-preview
+gpt-3.5-turbo-0125
+gpt-3.5-turbo-1106
+gpt-3.5-turbo-16k-0613
+gpt-3.5-turbo-0613
+gpt-4-0613
+claude-3-opus-20240229
+claude-3-sonnet-20240229
+claude-3-haiku-20240307
+claude-3-5-sonnet-20240620
+bedrock/anthropic.claude-3-opus-20240229-v1:0
+bedrock/anthropic.claude-3-sonnet-20240229-v1:0
+bedrock/anthropic.claude-3-haiku-20240307-v1:0
+llama3
+llama3:70b
+groq/llama3-8b-8192
+groq/llama3-70b-8192
+groq/mixtral-8x7b-32768
+groq/gemma-7b-it
+litellm-gpt-4o-2024-05-13
+litellm-gpt-4-turbo-2024-04-09
+litellm-gpt-4-0125-preview
+litellm-gpt-4-1106-preview
+litellm-gpt-3.5-turbo-0125
+litellm-gpt-3.5-turbo-1106
+litellm-gpt-3.5-turbo-16k-0613
+litellm-gpt-3.5-turbo-0613
+litellm-gpt-4-0613
+gemini-1.0-pro-002
+gemini-1.5-pro-preview-0409
+
+
+```
 cd /opt/auto-code-rover
 conda activate auto-code-rover
 PYTHONPATH=. python app/main.py swe-bench --model gpt-4o-2024-05-13 --setup-map ../SWE-bench/setup_result/setup_map.json --tasks-map ../SWE-bench/setup_result/tasks_map.json --output-dir output --task django__django-11133
+
+PYTHONPATH=. python app/main.py swe-bench --model "gemini/gemini-1.5-pro-exp-0827" --model-temperature=0.2 --setup-map /opt/scratch/setup_result/setup_map.json --tasks-map /opt/scratch/setup_result/tasks_map.json --output-dir /opt/scratch/output --task astropy__astropy-12907
+
+PYTHONPATH=. python app/main.py swe-bench --model "vertex_ai/gemini-pro-experimental" --model-temperature=0.2 --setup-map /opt/scratch/setup_result/setup_map.json --tasks-map /opt/scratch/setup_result/tasks_map.json --output-dir /opt/scratch/output --task astropy__astropy-12907 --enable-validation
+
 ```
 
 The output of the run can then be found in `output/`. For example, the patch generated for `django__django-11133` can be found at a location like this: `output/applicable_patch/django__django-11133_yyyy-MM-dd_HH-mm-ss/extracted_patch_1.diff` (the date-time field in the directory name will be different depending on when the experiment was run).
@@ -330,3 +375,13 @@ Alternatively, contact us at: {[yuntong](https://yuntongzhang.github.io/),[hruan
 ## Acknowledgements
 
 This work was partially supported by a Singapore Ministry of Education (MoE) Tier 3 grant "Automated Program Repair", MOE-MOET32021-0001.
+
+
+
+export LITELLM_LOG=DEBUG
+
+
+
+python harness/run_evaluation.py --swe_bench_tasks /opt/SWE-bench/data/swe-bench.json --predictions_path /opt/scratch/output/autodev-aistudio-gemini-1.5-pro/predictions_for_swebench.json --log_dir /opt/scratch/eval_logs/autodev-aistudio-gemini-1.5-pro --testbed /opt/SWE-bench/temp_eval_testbed/autodev-aistudio-gemini-1.5-pro --verbose
+
+python harness/run_evaluation.py --swe_bench_tasks /opt/SWE-bench/data/swe-bench.json --predictions_path /opt/scratch/experiment/autodev-aistudio-gemini-1.5-pro/predictions_for_swebench.json --log_dir /opt/scratch/eval_logs/autodev-aistudio-gemini-1.5-pro --testbed /opt/SWE-bench/temp_eval_testbed/autodev-aistudio-gemini-1.5-pro --verbose 

@@ -16,9 +16,9 @@ from app.model import common
 from app.model.common import Model
 
 
-class GeminiModel(Model):
+class VertexAIModel(Model):
     """
-    Base class for creating Singleton instances of Gemini models.
+    Base class for creating Singleton instances of Vertex AI Gemini models.
     """
 
     _instances = {}
@@ -48,15 +48,19 @@ class GeminiModel(Model):
         self.check_api_key()
 
     def check_api_key(self) -> str:
-        key_name = "GEMINI_API_KEY"
-        credential_name = "GOOGLE_APPLICATION_CREDENTIALS"
-
-        gemini_key = os.getenv(key_name)
-        credential_key = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-        if not (gemini_key or credential_key):
-            print(f"Please set the {key_name} or {credential_name} env var")
+        project_id = os.getenv("PROJECT_ID")
+        if not (project_id):
+            print(f"Please set the PROJECT_ID env var")
             sys.exit(1)
-        return gemini_key or credential_key
+            
+        import subprocess
+        import google.auth
+
+        if __name__ == "__main__":
+            subprocess.run(['gcloud', 'config', 'set', 'project', project_id, ])
+            credentials, project_id = google.auth.default()
+            print(project_id)
+        return project_id
 
     def extract_resp_content(self, chat_message: Message) -> str:
         """
@@ -119,7 +123,7 @@ class GeminiModel(Model):
             raise e
 
 
-class GeminiPro(GeminiModel):
+class GeminiPro(VertexAIModel):
     def __init__(self):
         super().__init__(
             "gemini-1.0-pro-002", 0.00000035, 0.00000105, parallel_tool_call=True
@@ -127,20 +131,20 @@ class GeminiPro(GeminiModel):
         self.note = "Gemini 1.0 from Google"
 
 
-class Gemini15Pro(GeminiModel):
+class Gemini15Pro(VertexAIModel):
     def __init__(self):
         super().__init__(
-            "gemini/gemini-1.5-pro",
+            "vertex_ai/gemini-1.5-pro-001",
             0.00000035,
             0.00000105,
             parallel_tool_call=True,
         )
         self.note = "Gemini 1.5 from Google"
         
-class Gemini15ProExp(GeminiModel):
+class Gemini15ProExp(VertexAIModel):
     def __init__(self):
         super().__init__(
-            "gemini/gemini-1.5-pro-exp-0827",
+            "vertex_ai/gemini-pro-experimental",
             0.00000035,
             0.00000105,
             parallel_tool_call=True,
@@ -148,20 +152,20 @@ class Gemini15ProExp(GeminiModel):
         self.note = "Gemini 1.5 from Google"
 
 
-class Gemini15Flash(GeminiModel):
+class Gemini15Flash(VertexAIModel):
     def __init__(self):
         super().__init__(
-            "gemini/gemini-1.5-flash",
+            "vertex_ai/gemini-1.5-flash-001",
             0.00000035,
             0.00000105,
             parallel_tool_call=True,
         )
         self.note = "Gemini 1.5 Flash from Google"
         
-class Gemini15FlashExp(GeminiModel):
+class Gemini15FlashExp(VertexAIModel):
     def __init__(self):
         super().__init__(
-            "gemini/gemini-1.5-flash-exp-0827",
+            "vertex_ai/gemini-flash-experimental",
             0.00000035,
             0.00000105,
             parallel_tool_call=True,
