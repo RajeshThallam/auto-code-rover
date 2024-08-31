@@ -3,8 +3,7 @@
 
 ## STEP 1. Build Docker image
 ```
-# git clone https://github.com/RajeshThallam/auto-code-rover.git
-
+git clone https://github.com/RajeshThallam/auto-code-rover.git
 docker build -f Dockerfile -t acr .
 ```
 
