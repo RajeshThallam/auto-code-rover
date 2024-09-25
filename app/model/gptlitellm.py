@@ -129,6 +129,13 @@ class Gpt4o_20240513LiteLLM(OpenaiLiteLLMModel):
             "litellm-gpt-4o-2024-05-13", 0.000005, 0.000015, parallel_tool_call=True
         )
         self.note = "Multimodal model. Up to Oct 2023."
+        
+class Gpt4o_20240806LiteLLM(OpenaiLiteLLMModel):
+    def __init__(self):
+        super().__init__(
+            "litellm-gpt-4o-2024-08-06", 0.000005, 0.000015, parallel_tool_call=True
+        )
+        self.note = "Multimodal model. Up to Oct 2023."
 
 
 class Gpt4_Turbo20240409LiteLLM(OpenaiLiteLLMModel):

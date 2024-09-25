@@ -1,4 +1,4 @@
-from app.model import bedrock, claude, common, gemini, gpt, gptlitellm, groq, ollama, vertexai
+from app.model import bedrock, claude, common, gemini, gpt, gptlitellm, groq, ollama, vertexai, vertextai_openai
 
 
 def register_all_models() -> None:
@@ -35,6 +35,7 @@ def register_all_models() -> None:
     common.register_model(groq.Gemma_7B())
 
     common.register_model(gptlitellm.Gpt4o_20240513LiteLLM())
+    common.register_model(gptlitellm.Gpt4o_20240806LiteLLM())
     common.register_model(gptlitellm.Gpt4_Turbo20240409LiteLLM())
     common.register_model(gptlitellm.Gpt4_0125PreviewLiteLLM())
     common.register_model(gptlitellm.Gpt4_1106PreviewLiteLLM())
@@ -50,11 +51,17 @@ def register_all_models() -> None:
     common.register_model(gemini.Gemini15ProExp())
     common.register_model(gemini.Gemini15FlashExp())
 
-    common.register_model(vertexai.GeminiPro())
-    common.register_model(vertexai.Gemini15Pro())
-    common.register_model(vertexai.Gemini15Flash())
-    common.register_model(vertexai.Gemini15ProExp())
-    common.register_model(vertexai.Gemini15FlashExp())
+    # common.register_model(vertexai.GeminiPro())
+    # common.register_model(vertexai.Gemini15Pro())
+    # common.register_model(vertexai.Gemini15Flash())
+    # common.register_model(vertexai.Gemini15ProExp())
+    # common.register_model(vertexai.Gemini15FlashExp())
+    
+    common.register_model(vertextai_openai.GeminiPro())
+    common.register_model(vertextai_openai.Gemini15Pro())
+    common.register_model(vertextai_openai.Gemini15Flash())
+    common.register_model(vertextai_openai.Gemini15ProExp())
+    common.register_model(vertextai_openai.Gemini15FlashExp())
 
     # register default model as selected
     common.SELECTED_MODEL = gpt.Gpt35_Turbo0125()

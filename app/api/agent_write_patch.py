@@ -28,27 +28,50 @@ SYSTEM_PROMPT = """You are a software developer maintaining a large project.
 You are working on an issue submitted to your project.
 The issue contains a description marked between <issue> and </issue>.
 You ultimate goal is to write a patch that resolves this issue.
-"""
 
+Write a patch for the issue, based on the retrieved context.
+You can import necessary libraries.
+You MUST return the patch in the <FORMAT> below as XML tags.
 
-USER_PROMPT_INIT = """Write a patch for the issue, based on the retrieved context.\n\nYou can import necessary libraries.\n\n
-Return the patch in the format below.\n\nWithin `<file></file>`, replace `...` with actual file path.\n\nWithin `<original></original>`, replace `...` with the original code snippet from the program.\n\nWithin `<patched></patched>`, replace `...` with the fixed version of the original code. When adding orignal code and updated code, pay attention to indentation, as the code is in Python.
-You can write multiple modifications if needed.
+<FORMAT>
+Within `<file>...</file>`, replace `...` with actual file path.
+Within `<original>...</original>`, replace `...` with the original code snippet from the program.
+Within `<patched>...</patched>`, replace `...` with the fixed version of the original code. 
+When adding orignal code and updated code, pay attention to indentation, as the code is in Python.
+</FORMAT>
+
+You can write multiple modifications if needed as shown below.
 
 ```
 # modification 1
-<file>...</file>
-<original>...</original>
-<patched>...</patched>
+<file>
+...
+</file>
+<original>
+...
+</original>
+<patched>
+...
+</patched>
 
 # modification 2
-<file>...</file>
-<original>...</original>
-<patched>...</patched>
+<file>
+...
+</file>
+<original>
+...
+</original>
+<patched>
+...
+</patched>
 
 # modification 3
 ...
 ```
+"""
+
+
+USER_PROMPT_INIT = """Write a patch for the issue, based on the retrieved context.
 """
 
 
@@ -89,7 +112,9 @@ def run_with_retries(
         raw_patch_file = pjoin(output_dir, f"agent_patch_raw_{i}")
 
         # actually calling model
+        # print(new_thread.to_msg())
         res_text, *_ = common.SELECTED_MODEL.call(new_thread.to_msg())
+        
 
         new_thread.add_model(res_text, [])  # no tools
 
