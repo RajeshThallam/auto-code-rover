@@ -69,6 +69,8 @@ cd /opt/auto-code-rover
 conda activate auto-code-rover
 PYTHONPATH=. python app/main.py swe-bench --model "vertex_ai/gemini-1.5-pro-001" --model-temperature=0.2 --setup-map /opt/scratch/setup_result/setup_map.json --tasks-map /opt/scratch/setup_result/tasks_map.json --output-dir /opt/scratch/output --task-list-file /opt/auto-code-rover/conf/autodev_exp_tasks.txt
 ```
+#### Using with Gemini 2.0 Flash (Experimental)
+PYTHONPATH=. python app/main.py swe-bench --model "vertex_ai/gemini-2.0-flash-exp" --model-temperature=0.2 --setup-map /opt/scratch/setup_result/setup_map.json --tasks-map /opt/scratch/setup_result/tasks_map.json --output-dir /opt/scratch/output --task-list-file /opt/auto-code-rover/conf/autodev_lite_tasks.txt
 
 **NOTE**: make sure that the tasks in `autodev_exp_tasks.txt` have all been set up in SWE-bench. See STEP 3.
 

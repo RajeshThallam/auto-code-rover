@@ -62,6 +62,7 @@ def register_all_models() -> None:
     common.register_model(vertextai_openai.Gemini15Flash())
     common.register_model(vertextai_openai.Gemini15ProExp())
     common.register_model(vertextai_openai.Gemini15FlashExp())
+    common.register_model(vertextai_openai.Gemini20FlashExp())
 
     # register default model as selected
     common.SELECTED_MODEL = gpt.Gpt35_Turbo0125()

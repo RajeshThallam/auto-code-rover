@@ -317,3 +317,13 @@ class Gemini15FlashExp(VertexAIModel):
             parallel_tool_call=True,
         )
         self.note = "Gemini 1.5 Flash from Google"
+        
+class Gemini20FlashExp(VertexAIModel):
+    def __init__(self):
+        super().__init__(
+            "vertex_ai/gemini-2.0-flash-exp",
+            0.00000035,
+            0.00000105,
+            parallel_tool_call=True,
+        )
+        self.note = "Gemini 2.0 Flash Experimental from Google"
